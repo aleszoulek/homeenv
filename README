@@ -1,0 +1,1 @@
+wget http://github.com/aleszoulek/homeenv/raw/master/bin/homeenv -o /dev/null -O - | bash -s init
