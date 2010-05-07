@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+# this removes duplicates from PATH, CDPATH, MANPATH, and FPATH
+typeset -U path cdpath manpath fpath
+
+if [ `tty` '=' '/dev/tty1' ]; then xinit;  fi

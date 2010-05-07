@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+alias ls="ls --color=auto"
+alias s="screen -xRU"
+alias ll="ls -lh"
+alias rm_py='find . \( -name "*.pyc" -o -name "*.pyo" \) -exec rm -v {} \;'
+alias vim='vim -p'
+
