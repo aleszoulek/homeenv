@@ -5,8 +5,8 @@ set -e
 USAGE="$0 [ init | update | push ]"
 
 WORKDIR_NAME='.homeenv'
-#GIT_REPOSITORY_PATH='git@github.com:aleszoulek/homeenv.git'
-GIT_REPOSITORY_PATH='/home/al3x/GIT/homeenv/'
+GIT_REPOSITORY_PATH='git@github.com:aleszoulek/homeenv.git'
+#GIT_REPOSITORY_PATH='/home/al3x/GIT/homeenv/'
 
 fail(){
 	echo $1 >&2
@@ -85,8 +85,8 @@ push(){
 	done
 	find ../../`hostname`/patches -type f -size 0 -exec rm -v {} \;
 	
-
-# push
+	# push
+	# TODO
 }
 
 ## PREREQ ##
