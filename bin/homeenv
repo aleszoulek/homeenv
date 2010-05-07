@@ -1,0 +1,88 @@
+#!/bin/bash
+
+set -e
+
+USAGE="$0 [ init | update | push ]"
+
+WORKDIR_NAME='.homeenv'
+#GIT_REPOSITORY_PATH='git@github.com:aleszoulek/homeenv.git'
+GIT_REPOSITORY_PATH='/home/al3x/GIT/homeenv/'
+
+fail(){
+	echo $1 >&2
+	exit 1
+}
+
+check_prerequisities(){
+	if which git > /dev/null 2>&1; then
+		: pass
+	else
+		fail "Missing dependecy: git"
+	fi
+}
+
+## INIT ##
+init(){
+	# create HOMEENV
+	cd ~
+	if [ -e "$WORKDIR_NAME" ]; then
+		fail "Can not init homeenv working dir. File already exists (~/$WORKDIR_NAME)"
+	fi
+	mkdir "$WORKDIR_NAME"
+
+	# full download
+	cd "$WORKDIR_NAME"
+	git clone "$GIT_REPOSITORY_PATH" .
+
+	# find env config
+	if [ -e environments/`hostname` ]; then
+		cd environments/`hostname`
+		env_dir=`pwd`
+		cd -
+	else
+		cd environments/`hostname`
+		env_dir=`pwd`
+		cd -
+	fi
+
+	# install "dependecies"
+	source "$env_dir/init"
+	tempdir=`mktemp -d`
+	# copy and patch home files
+	cp -vr environments/BASE/files/.[^.]* $tempdir
+	cd $tempdir
+	find "$env_dir/patches" | while read patchfile; do
+	echo "patch $patchfile"
+		patch < $patchfile
+	done
+}
+
+## PREREQ ##
+
+check_prerequisities
+
+if [ "$1" '=' 'init' ]; then
+	init
+elif [ "$1" '=' 'update' ]; then
+	fail 'Update not implemented'
+elif [ "$1" '=' 'push' ]; then
+	fail 'Push not implemented'
+else
+	fail "$USAGE"
+fi
+
+
+
+
+## UPDATE ##
+
+# cd HOMEENV
+# update
+# dtto
+
+## PUSH ##
+
+# cd HOMEENV
+# diff HOME and HOMEENV/base
+# write patch HOMEENV/patch/machine
+# push
