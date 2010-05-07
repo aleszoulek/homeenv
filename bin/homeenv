@@ -51,10 +51,14 @@ init(){
 	# copy and patch home files
 	cp -vr environments/BASE/files/.[^.]* $tempdir
 	cd $tempdir
-	find "$env_dir/patches" | while read patchfile; do
-	echo "patch $patchfile"
-		patch < $patchfile
-	done
+	if [ -e "$env_dir/patches" ]; then
+		find "$env_dir/patches" | while read patchfile; do
+			echo "patch $patchfile"
+			patch < $patchfile
+		done
+	else
+		echo "no patches there"
+	fi
 }
 
 ## PREREQ ##
