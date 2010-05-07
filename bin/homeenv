@@ -59,6 +59,34 @@ init(){
 	else
 		echo "no patches there"
 	fi
+	cp -vr $tempdir/.[^.]* ~
+}
+
+## PUSH ##
+push(){
+	# cd HOMEENV
+	cd ~
+	if [ -e "$WORKDIR_NAME" ]; then
+		: pass
+	else
+		fail "Can not push - homeenv working dir not found (~/$WORKDIR_NAME)"
+	fi
+	cd "$WORKDIR_NAME"
+
+	# diff HOME and HOMEENV/base
+	# write patch HOMEENV/patch/machine
+	mkdir environments/`hostname`/patches -p
+	cd environments/BASE/files/
+	find -type d | while read dirname; do
+		mkdir ../../`hostname`/patches/$dirname -p
+	done
+	find -type f | while read filename; do
+		( diff $filename ~/$filename >../../`hostname`/patches/$filename ) || true
+	done
+	find ../../`hostname`/patches -type f -size 0 -exec rm -v {} \;
+	
+
+# push
 }
 
 ## PREREQ ##
@@ -70,7 +98,7 @@ if [ "$1" '=' 'init' ]; then
 elif [ "$1" '=' 'update' ]; then
 	fail 'Update not implemented'
 elif [ "$1" '=' 'push' ]; then
-	fail 'Push not implemented'
+	push
 else
 	fail "$USAGE"
 fi
@@ -84,9 +112,3 @@ fi
 # update
 # dtto
 
-## PUSH ##
-
-# cd HOMEENV
-# diff HOME and HOMEENV/base
-# write patch HOMEENV/patch/machine
-# push
